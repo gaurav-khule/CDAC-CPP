@@ -1,0 +1,504 @@
+Q1.
+#include <iostream>
+using namespace std;
+class Employee {
+protected:
+    string name;
+    int id;
+    double salary;
+
+public:
+    Employee(string n, int i, double s) {
+        name = n;
+        id = i;
+        salary = s;
+
+        cout << "Employee Constructor Called" << endl;
+    }
+
+    void displayEmployee() {
+        cout << "\n----- Employee Details -----" << endl;
+        cout << "Name   : " << name << endl;
+        cout << "ID     : " << id << endl;
+        cout << "Salary : Rs. " << salary << endl;
+    }
+
+    ~Employee() {
+        cout << "Employee Destructor Called" << endl;
+    }
+};
+
+class Manager : public Employee {
+private:
+    string department;
+
+public:
+    Manager(string n, int i, double s, string d)
+        : Employee(n, i, s) {
+        department = d;
+
+        cout << "Manager Constructor Called" << endl;
+    }
+
+    void displayManager() {
+        cout << "\n----- Manager Details -----" << endl;
+        cout << "Name       : " << name << endl;
+        cout << "ID         : " << id << endl;
+        cout << "Salary     : Rs. " << salary << endl;
+        cout << "Department : " << department << endl;
+    }
+
+    ~Manager() {
+        cout << "Manager Destructor Called" << endl;
+    }
+};
+
+int main() {
+
+    Manager m("Payal", 109, 50000, "Comp");
+
+    cout << "\nDisplaying Employee Details:";
+    m.displayEmployee();
+
+    cout << "\nDisplaying Manager Details:";
+    m.displayManager();
+
+    cout << "\nEnd of main()" << endl;
+
+    return 0;
+}
+-----------------------------------------------------------------------
+Q4.
+#include <iostream>
+using namespace std;
+
+class Number {
+private:
+    int a;
+    int b;
+
+public:
+    void input() {
+        cout << "Enter first number: ";
+        cin >> a;
+
+        cout << "Enter second number: ";
+        cin >> b;
+    }
+
+    friend int findMax(Number n);
+};
+
+int findMax(Number n) {
+    if (n.a > n.b)
+        return n.a;
+    else
+        return n.b;
+}
+
+int main() {
+    Number num;
+
+    num.input();
+
+    cout << "\nLarger number = " << findMax(num) << endl;
+
+    return 0;
+}
+-------------------------------------------------------------------------------
+Q5.
+#include <iostream>
+using namespace std;
+
+class Complex {
+private:
+    int real;
+    int imaginary;
+
+public:
+    void input() {
+        cout << "Enter real part: ";
+        cin >> real;
+
+        cout << "Enter imaginary part: ";
+        cin >> imaginary;
+    }
+
+    friend Complex add(Complex c1, Complex c2);
+
+    void display() {
+        cout << real;
+
+        if (imaginary >= 0)
+            cout << " + " << imaginary << "i";
+        else
+            cout << " - " << -imaginary << "i";
+    }
+};
+
+Complex add(Complex c1, Complex c2) {
+    Complex result;
+
+    result.real = c1.real + c2.real;
+    result.imaginary = c1.imaginary + c2.imaginary;
+
+    return result;
+}
+
+int main() {
+    Complex c1, c2, sum;
+
+    cout << "Enter First Complex Number:" << endl;
+    c1.input();
+
+    cout << "\nEnter Second Complex Number:" << endl;
+    c2.input();
+
+    sum = add(c1, c2);
+
+    cout << "\nFirst Complex Number: ";
+    c1.display();
+
+    cout << "\nSecond Complex Number: ";
+    c2.display();
+
+    cout << "\nSum: ";
+    sum.display();
+
+    cout << endl;
+
+    return 0;
+}
+-----------------------------------------------------------
+Q6.
+#include <iostream>
+using namespace std;
+
+class ClassB;  
+
+class ClassA {
+private:
+    int valueA;
+
+public:
+    void inputValue() {
+        cout << "Enter value for ClassA: ";
+        cin >> valueA;
+    }
+
+    void displayValue() {
+        cout << "ClassA value: " << valueA << endl;
+    }
+
+    friend void swapValues(ClassA &a, ClassB &b);
+};
+
+class ClassB {
+private:
+    int valueB;
+
+public:
+    void inputValue() {
+        cout << "Enter value for ClassB: ";
+        cin >> valueB;
+    }
+
+    void displayValue() {
+        cout << "ClassB value: " << valueB << endl;
+    }
+
+    friend void swapValues(ClassA &a, ClassB &b);
+};
+
+void swapValues(ClassA &a, ClassB &b) {
+    int temp;
+
+    temp = a.valueA;
+    a.valueA = b.valueB;
+    b.valueB = temp;
+}
+
+int main() {
+    ClassA a;
+    ClassB b;
+
+    a.inputValue();
+    b.inputValue();
+
+    cout << "\nBefore Swapping:" << endl;
+    a.displayValue();
+    b.displayValue();
+
+    swapValues(a, b);
+
+    cout << "\nAfter Swapping:" << endl;
+    a.displayValue();
+    b.displayValue();
+
+    return 0;
+}
+
+------------------------------------------------------------
+Q7.
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+class Point 
+{
+private:
+    float x;
+    float y;
+
+public:
+    void inputPoint() 
+	{
+        cout << "Enter x coordinate: ";
+        cin >> x;
+
+        cout << "Enter y coordinate: ";
+        cin >> y;
+    }
+
+    friend float calculateDistance(Point p1, Point p2);
+};
+
+float calculateDistance(Point p1, Point p2) 
+{
+    float distance;
+
+    distance = sqrt(
+        (p2.x - p1.x) * (p2.x - p1.x) +
+        (p2.y - p1.y) * (p2.y - p1.y)
+    );
+
+    return distance;
+}
+
+int main() 
+{
+    Point p1, p2;
+
+    cout << "Enter details of first point:" << endl;
+    p1.inputPoint();
+
+    cout << "\nEnter details of second point:" << endl;
+    p2.inputPoint();
+
+    float distance = calculateDistance(p1, p2);
+
+    cout << "\nDistance between the two points = "
+         << distance << endl;
+
+    return 0;
+}
+------------------------------------------------------------------
+Q8.
+#include <iostream>
+using namespace std;
+
+class Time {
+private:
+    int hours;
+    int minutes;
+    int seconds;
+
+public:
+    void inputTime() {
+        cout << "Enter hours: ";
+        cin >> hours;
+
+        cout << "Enter minutes: ";
+        cin >> minutes;
+
+        cout << "Enter seconds: ";
+        cin >> seconds;
+    }
+
+    friend Time addTime(Time t1, Time t2);
+
+    void displayTime() {
+        cout << hours << " hours "
+             << minutes << " minutes "
+             << seconds << " seconds" << endl;
+    }
+};
+
+Time addTime(Time t1, Time t2) {
+    Time total;
+
+    total.seconds = t1.seconds + t2.seconds;
+    total.minutes = t1.minutes + t2.minutes;
+    total.hours = t1.hours + t2.hours;
+
+    if (total.seconds >= 60) {
+        total.seconds -= 60;
+        total.minutes++;
+    }
+
+
+    if (total.minutes >= 60) {
+        total.minutes -= 60;
+        total.hours++;
+    }
+
+    return total;
+}
+
+int main() {
+    Time t1, t2, total;
+
+    cout << "Enter first time:" << endl;
+    t1.inputTime();
+
+    cout << "\nEnter second time:" << endl;
+    t2.inputTime();
+
+    total = addTime(t1, t2);
+
+    cout << "\nTotal Time: ";
+    total.displayTime();
+
+    return 0;
+}
+----------------------------------------------------
+Q9.
+#include <iostream>
+using namespace std;
+
+class Student {
+private:
+    string name;
+    int rollNo;
+    float marks;
+
+public:
+    void inputDetails() {
+        cout << "Enter Student Name: ";
+        cin >> name;
+
+        cout << "Enter Roll Number: ";
+        cin >> rollNo;
+
+        cout << "Enter Marks: ";
+        cin >> marks;
+    }
+
+    friend class Result;
+};
+
+class Result {
+public:
+    void displayResult(Student &s) {
+        cout << "\n----- Student Result -----" << endl;
+        cout << "Name: " << s.name << endl;
+        cout << "Roll Number: " << s.rollNo << endl;
+        cout << "Marks: " << s.marks << endl;
+
+        if (s.marks >= 40) {
+            cout << "Result: PASS" << endl;
+        } else {
+            cout << "Result: FAIL" << endl;
+        }
+    }
+};
+
+int main() {
+    Student student;
+    Result result;
+    student.inputDetails();
+    result.displayResult(student);
+
+    return 0;
+}
+------------------------------------------------------------------------------
+
+Q10.
+#include <iostream>
+using namespace std;
+
+class BankAccount 
+{
+private:
+    int accountNumber;
+    string accountHolder;
+    double balance;
+
+public:
+
+    void inputAccountDetails() 
+	{
+        cout << "Enter Account Number: ";
+        cin >> accountNumber;
+
+        cout << "Enter Account Holder Name: ";
+        cin >> accountHolder;
+
+        cout << "Enter Initial Balance: ";
+        cin >> balance;
+    }
+
+    friend class BankManager;
+};
+
+class BankManager
+{
+public:
+
+    void displayDetails(BankAccount &account) 
+	{
+        cout << "\n----- Account Details -----" << endl;
+        cout << "Account Number: " << account.accountNumber << endl;
+        cout << "Account Holder: " << account.accountHolder << endl;
+        cout << "Balance: Rs. " << account.balance << endl;
+    }
+
+    void deposit(BankAccount &account, double amount) 
+	{
+        account.balance += amount;
+        cout << "Amount Deposited: Rs. " << amount << endl;
+    }
+
+    void withdraw(BankAccount &account, double amount) 
+	{
+        if (amount <= account.balance) 
+		{
+            account.balance -= amount;
+            cout << "Amount Withdrawn: Rs. " << amount << endl;
+        } else 
+		{
+            cout << "Insufficient Balance!" << endl;
+        }
+    }
+
+    void displayBalance(BankAccount &account) 
+	{
+        cout << "Updated Balance: Rs. " << account.balance << endl;
+    }
+};
+
+int main() 
+{
+    BankAccount account;
+    BankManager manager;
+
+    account.inputAccountDetails();
+
+    manager.displayDetails(account);
+
+    double depositAmount;
+    cout << "\nEnter amount to deposit: ";
+    cin >> depositAmount;
+
+    manager.deposit(account, depositAmount);
+    manager.displayBalance(account);
+
+    double withdrawAmount;
+    cout << "\nEnter amount to withdraw: ";
+    cin >> withdrawAmount;
+
+    manager.withdraw(account, withdrawAmount);
+    manager.displayBalance(account);
+
+    return 0;
+}
