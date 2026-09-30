@@ -1,0 +1,5 @@
+1.Oversize T-shirt = Rs.999
+2.Shirt = Rs.1299
+3.Shoe = Rs.3999
+4.Jeans = Rs.1499
+5.Jackets = Rs.5999

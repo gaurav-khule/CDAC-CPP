@@ -1,0 +1,4 @@
+Alex Patil
+Qualification = BE(COMP)
+Salary = 50000 per month
+Experience = 4 years
