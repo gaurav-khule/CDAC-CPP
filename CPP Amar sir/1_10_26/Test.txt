@@ -1,0 +1,10 @@
+apple
+banana
+pineapple
+guava
+graphs
+orange
+licchy
+watermelon
+chiku
+mango

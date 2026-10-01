@@ -1,0 +1,1026 @@
+Gaurav Khule
+Roll_No:20
+
+Q1.
+#include <iostream>
+#include <fstream>
+#include <cstring>
+using namespace std;
+
+class Transaction
+{
+public:
+    int id;
+    long long accNo;
+    char date[11];
+    char type[10];
+    double amount;
+    double balance;
+
+    void input()
+    {
+        cout << "Enter Transaction ID: ";
+        cin >> id;
+
+        cout << "Enter Account Number: ";
+        cin >> accNo;
+
+        cout << "Enter Date (DD-MM-YYYY): ";
+        cin >> date;
+
+        cout << "Enter Type (DEPOSIT/WITHDRAW/TRANSFER): ";
+        cin >> type;
+
+        cout << "Enter Amount: ";
+        cin >> amount;
+
+        cout << "Enter Balance: ";
+        cin >> balance;
+    }
+
+    void display()
+    {
+        cout << id << "\t"
+             << accNo << "\t"
+             << date << "\t"
+             << type << "\t"
+             << amount << "\t"
+             << balance << endl;
+    }
+};
+bool idExists(int id)
+{
+    ifstream file("bank.dat", ios::binary);
+    Transaction t;
+
+    while (file.read((char*)&t, sizeof(t)))
+    {
+        if (t.id == id)
+            return true;
+    }
+
+    return false;
+}
+void add()
+{
+    Transaction t;
+    t.input();
+
+    if (idExists(t.id))
+    {
+        cout << "Transaction ID already exists!\n";
+        return;
+    }
+
+    ofstream file("bank.dat", ios::binary | ios::app);
+
+    file.write((char*)&t, sizeof(t));
+    file.close();
+
+    cout << "Transaction added.\n";
+}
+void search()
+{
+    long long acc;
+    cout << "Enter Account Number: ";
+    cin >> acc;
+
+    ifstream file("bank.dat", ios::binary);
+    Transaction t;
+    bool found = false;
+
+    cout << "\nID\tAccount\tDate\tType\tAmount\tBalance\n";
+
+    while (file.read((char*)&t, sizeof(t)))
+    {
+        if (t.accNo == acc)
+        {
+            t.display();
+            found = true;
+        }
+    }
+
+    if (!found)
+        cout << "No transaction found.\n";
+
+    file.close();
+}
+void balance()
+{
+    long long acc;
+    cout << "Enter Account Number: ";
+    cin >> acc;
+
+    ifstream file("bank.dat", ios::binary);
+    Transaction t;
+    double current = 0;
+    bool found = false;
+
+    while (file.read((char*)&t, sizeof(t)))
+    {
+        if (t.accNo == acc)
+        {
+            current = t.balance;
+            found = true;
+        }
+    }
+
+    if (found)
+        cout << "Current Balance = " << current << endl;
+    else
+        cout << "Account not found.\n";
+
+    file.close();
+}
+
+void modify()
+{
+    int id;
+    cout << "Enter Transaction ID: ";
+    cin >> id;
+
+    fstream file("bank.dat",
+                 ios::binary | ios::in | ios::out);
+
+    Transaction t;
+    bool found = false;
+
+    while (file.read((char*)&t, sizeof(t)))
+    {
+        if (t.id == id)
+        {
+            found = true;
+
+            cout << "Enter new details:\n";
+
+            cout << "Account Number: ";
+            cin >> t.accNo;
+
+            cout << "Date: ";
+            cin >> t.date;
+
+            cout << "Type: ";
+            cin >> t.type;
+
+            cout << "Amount: ";
+            cin >> t.amount;
+
+            cout << "Balance: ";
+            cin >> t.balance;
+
+            file.seekp(-sizeof(t), ios::cur);
+
+            file.write((char*)&t, sizeof(t));
+
+            cout << "Transaction modified.\n";
+            break;
+        }
+    }
+
+    if (!found)
+        cout << "Transaction not found.\n";
+
+    file.close();
+}
+
+void checkFile()
+{
+    ifstream file("bank.dat", ios::binary);
+
+    file.seekg(0, ios::end);
+
+    long long size = file.tellg();
+
+    if (size % sizeof(Transaction) == 0)
+        cout << "File is valid.\n";
+    else
+        cout << "File is corrupted/incomplete.\n";
+
+    file.close();
+}
+
+void monthlyReport()
+{
+    char month[3], year[5];
+
+    cout << "Enter Month (MM): ";
+    cin >> month;
+
+    cout << "Enter Year (YYYY): ";
+    cin >> year;
+
+    ifstream file("bank.dat", ios::binary);
+    Transaction t;
+    bool found = false;
+
+    while (file.read((char*)&t, sizeof(t)))
+    {
+
+        if (t.date[3] == month[0] &&
+            t.date[4] == month[1] &&
+            t.date[6] == year[0] &&
+            t.date[7] == year[1] &&
+            t.date[8] == year[2] &&
+            t.date[9] == year[3])
+        {
+            t.display();
+            found = true;
+        }
+    }
+
+    if (!found)
+        cout << "No transactions for this month.\n";
+
+    file.close();
+}
+
+
+int main()
+{
+    int choice;
+
+    do
+    {
+        cout << "\n===== BANKING LEDGER =====\n";
+        cout << "1. Add Transaction\n";
+        cout << "2. Search Account\n";
+        cout << "3. Current Balance\n";
+        cout << "4. Modify Transaction\n";
+        cout << "5. Check File\n";
+        cout << "6. Monthly Report\n";
+        cout << "7. Exit\n";
+
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        switch (choice)
+        {
+        case 1: add(); break;
+        case 2: search(); break;
+        case 3: balance(); break;
+        case 4: modify(); break;
+        case 5: checkFile(); break;
+        case 6: monthlyReport(); break;
+        case 7: cout << "Exit\n"; break;
+        default: cout << "Invalid choice\n";
+        }
+
+    } while (choice != 7);
+
+    return 0;
+}
+
+==============================================
+
+Q2.
+
+#include <iostream>
+#include <fstream>
+#include <cstring>
+using namespace std;
+
+class Student
+{
+public:
+    int rollNo;
+    char name[30];
+    char dept[20];
+    int semester;
+    float cgpa;
+    bool active;
+
+    void input()
+    {
+        cout << "Roll No: ";
+        cin >> rollNo;
+
+        cout << "Name: ";
+        cin >> name;
+
+        cout << "Department: ";
+        cin >> dept;
+
+        cout << "Semester: ";
+        cin >> semester;
+
+        cout << "CGPA: ";
+        cin >> cgpa;
+
+        active = true;
+    }
+
+    void display()
+    {
+        cout << rollNo << "\t"
+             << name << "\t"
+             << dept << "\t"
+             << semester << "\t"
+             << cgpa << endl;
+    }
+};
+
+void addIndex(int roll, long pos)
+{
+    ofstream index("index.dat", ios::binary | ios::app);
+
+    index.write((char*)&roll, sizeof(roll));
+    index.write((char*)&pos, sizeof(pos));
+
+    index.close();
+}
+
+long findPosition(int roll)
+{
+    ifstream index("index.dat", ios::binary);
+
+    int r;
+    long pos;
+
+    while (index.read((char*)&r, sizeof(r)))
+    {
+        index.read((char*)&pos, sizeof(pos));
+
+        if (r == roll)
+        {
+            index.close();
+            return pos;
+        }
+    }
+
+    index.close();
+    return -1;
+}
+
+void insertStudent()
+{
+    Student s;
+    s.input();
+
+    if (findPosition(s.rollNo) != -1)
+    {
+        cout << "Roll number already exists.\n";
+        return;
+    }
+
+    fstream file("students.dat",
+                 ios::binary | ios::in | ios::out);
+
+    if (!file)
+    {
+
+        ofstream create("students.dat", ios::binary);
+        create.close();
+
+        file.open("students.dat",
+                  ios::binary | ios::in | ios::out);
+    }
+
+    Student temp;
+    long pos = -1;
+
+    while (file.read((char*)&temp, sizeof(temp)))
+    {
+        if (!temp.active)
+        {
+            pos = file.tellg() - sizeof(temp);
+            break;
+        }
+    }
+
+    if (pos == -1)
+    {
+        file.clear();
+        file.seekp(0, ios::end);
+        pos = file.tellp();
+    }
+
+    file.seekp(pos);
+    file.write((char*)&s, sizeof(s));
+
+    file.close();
+
+    addIndex(s.rollNo, pos);
+
+    cout << "Student inserted successfully.\n";
+}
+
+void searchStudent()
+{
+    int roll;
+
+    cout << "Enter Roll Number: ";
+    cin >> roll;
+
+    long pos = findPosition(roll);
+
+    if (pos == -1)
+    {
+        cout << "Student not found.\n";
+        return;
+    }
+
+    ifstream file("students.dat", ios::binary);
+
+    Student s;
+
+    file.seekg(pos);
+    file.read((char*)&s, sizeof(s));
+
+    file.close();
+
+    if (s.active)
+    {
+        cout << "\nStudent Details:\n";
+        s.display();
+    }
+    else
+    {
+        cout << "Student is deleted.\n";
+    }
+}
+
+void updateCGPA()
+{
+    int roll;
+    float newCGPA;
+
+    cout << "Enter Roll Number: ";
+    cin >> roll;
+
+    long pos = findPosition(roll);
+
+    if (pos == -1)
+    {
+        cout << "Student not found.\n";
+        return;
+    }
+
+    fstream file("students.dat",
+                 ios::binary | ios::in | ios::out);
+
+    Student s;
+
+    file.seekg(pos);
+    file.read((char*)&s, sizeof(s));
+
+    if (!s.active)
+    {
+        cout << "Student is deleted.\n";
+        file.close();
+        return;
+    }
+
+    cout << "Current CGPA: " << s.cgpa << endl;
+
+    cout << "Enter New CGPA: ";
+    cin >> newCGPA;
+
+    s.cgpa = newCGPA;
+
+    file.seekp(pos);
+    file.write((char*)&s, sizeof(s));
+
+    file.close();
+
+    cout << "CGPA updated.\n";
+}
+
+void deleteStudent()
+{
+    int roll;
+
+    cout << "Enter Roll Number: ";
+    cin >> roll;
+
+    long pos = findPosition(roll);
+
+    if (pos == -1)
+    {
+        cout << "Student not found.\n";
+        return;
+    }
+
+    fstream file("students.dat",
+                 ios::binary | ios::in | ios::out);
+
+    Student s;
+
+    file.seekg(pos);
+    file.read((char*)&s, sizeof(s));
+
+    if (!s.active)
+    {
+        cout << "Already deleted.\n";
+        file.close();
+        return;
+    }
+
+    s.active = false;
+
+    file.seekp(pos);
+    file.write((char*)&s, sizeof(s));
+
+    file.close();
+
+    cout << "Student deleted logically.\n";
+}
+
+void displayAll()
+{
+    ifstream file("students.dat", ios::binary);
+
+    Student s;
+
+    cout << "\nRoll\tName\tDept\tSem\tCGPA\n";
+    cout << "--------------------------------------\n";
+
+    while (file.read((char*)&s, sizeof(s)))
+    {
+        if (s.active)
+            s.display();
+    }
+
+    file.close();
+}
+
+void sortByCGPA()
+{
+    Student arr[100];
+    int n = 0;
+
+    ifstream file("students.dat", ios::binary);
+
+    while (file.read((char*)&arr[n], sizeof(Student)))
+    {
+        if (arr[n].active)
+            n++;
+    }
+
+    file.close();
+
+    // Bubble Sort
+    for (int i = 0; i < n - 1; i++)
+    {
+        for (int j = 0; j < n - i - 1; j++)
+        {
+            if (arr[j].cgpa < arr[j + 1].cgpa)
+            {
+                Student temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
+
+    cout << "\nStudents sorted by CGPA:\n";
+    cout << "Roll\tName\tDept\tSem\tCGPA\n";
+
+    for (int i = 0; i < n; i++)
+        arr[i].display();
+}
+
+
+int main()
+{
+    int choice;
+
+    do
+    {
+        cout << "\n===== STUDENT DATABASE =====\n";
+        cout << "1. Insert Student\n";
+        cout << "2. Search Student\n";
+        cout << "3. Update CGPA\n";
+        cout << "4. Delete Student\n";
+        cout << "5. Display Active Students\n";
+        cout << "6. Sort by CGPA\n";
+        cout << "7. Exit\n";
+
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        switch (choice)
+        {
+        case 1:
+            insertStudent();
+            break;
+
+        case 2:
+            searchStudent();
+            break;
+
+        case 3:
+            updateCGPA();
+            break;
+
+        case 4:
+            deleteStudent();
+            break;
+
+        case 5:
+            displayAll();
+            break;
+
+        case 6:
+            sortByCGPA();
+            break;
+
+        case 7:
+            cout << "Exit\n";
+            break;
+
+        default:
+            cout << "Invalid choice.\n";
+        }
+
+    } while (choice != 7);
+
+    return 0;
+}
+====================================================
+Q3.
+
+#include <iostream>
+#include <fstream>
+#include <cstring>
+#include <ctime>
+using namespace std;
+class Patient
+{
+public:
+    int patientID;
+    char name[30];
+    int age;
+    char gender[10];
+    char disease[30];
+    int doctorID;
+    char admissionDate[11];
+    char dischargeDate[11];
+    double bill;
+    bool discharged;
+
+    void input()
+    {
+        cout << "Patient ID: ";
+        cin >> patientID;
+
+        cout << "Name: ";
+        cin >> name;
+
+        cout << "Age: ";
+        cin >> age;
+
+        cout << "Gender: ";
+        cin >> gender;
+
+        cout << "Disease: ";
+        cin >> disease;
+
+        cout << "Doctor ID: ";
+        cin >> doctorID;
+
+        cout << "Admission Date (DD-MM-YYYY): ";
+        cin >> admissionDate;
+
+        strcpy(dischargeDate, "NA");
+
+        cout << "Bill Amount: ";
+        cin >> bill;
+
+        discharged = false;
+    }
+
+    void display()
+    {
+        cout << patientID << "\t"
+             << name << "\t"
+             << age << "\t"
+             << gender << "\t"
+             << disease << "\t"
+             << doctorID << "\t"
+             << admissionDate << "\t"
+             << dischargeDate << "\t"
+             << bill << endl;
+    }
+};
+bool idExists(int id)
+{
+    ifstream file("patients.dat", ios::binary);
+
+    Patient p;
+
+    while (file.read((char*)&p, sizeof(p)))
+    {
+        if (p.patientID == id)
+        {
+            file.close();
+            return true;
+        }
+    }
+
+    file.close();
+    return false;
+}
+void addPatient()
+{
+    Patient p;
+
+    p.input();
+
+    if (idExists(p.patientID))
+    {
+        cout << "Patient ID already exists.\n";
+        return;
+    }
+
+    ofstream file("patients.dat",
+                  ios::binary | ios::app);
+
+    file.write((char*)&p, sizeof(p));
+
+    file.close();
+
+    cout << "Patient added successfully.\n";
+}
+void searchPatient()
+{
+    int id;
+
+    cout << "Enter Patient ID: ";
+    cin >> id;
+
+    ifstream file("patients.dat", ios::binary);
+
+    Patient p;
+    bool found = false;
+
+    while (file.read((char*)&p, sizeof(p)))
+    {
+        if (p.patientID == id)
+        {
+            cout << "\nPatient Details:\n";
+            p.display();
+            found = true;
+            break;
+        }
+    }
+
+    if (!found)
+        cout << "Patient not found.\n";
+
+    file.close();
+}
+void audit(int id, double oldBill, double newBill)
+{
+    ofstream file("audit.txt", ios::app);
+
+    time_t now = time(0);
+    char* timeNow = ctime(&now);
+
+    file << "Patient " << id << " modified\n";
+    file << "Old Bill: " << oldBill << "\n";
+    file << "New Bill: " << newBill << "\n";
+    file << "Time: " << timeNow;
+    file << "-----------------------------\n";
+
+    file.close();
+}
+void doctorReport()
+{
+    int doctor;
+
+    cout << "Enter Doctor ID: ";
+    cin >> doctor;
+
+    ifstream file("patients.dat", ios::binary);
+
+    Patient p;
+    bool found = false;
+
+    cout << "\nPatients treated by Doctor "
+         << doctor << ":\n";
+
+    cout << "ID\tName\tAge\tDisease\tBill\n";
+
+    while (file.read((char*)&p, sizeof(p)))
+    {
+        if (p.doctorID == doctor)
+        {
+            cout << p.patientID << "\t"
+                 << p.name << "\t"
+                 << p.age << "\t"
+                 << p.disease << "\t"
+                 << p.bill << endl;
+
+            found = true;
+        }
+    }
+
+    if (!found)
+        cout << "No patients found.\n";
+
+    file.close();
+}
+void updateBill()
+{
+    int id;
+    double newBill;
+
+    cout << "Enter Patient ID: ";
+    cin >> id;
+
+    fstream file("patients.dat",
+                 ios::binary | ios::in | ios::out);
+
+    Patient p;
+    bool found = false;
+
+    while (file.read((char*)&p, sizeof(p)))
+    {
+        if (p.patientID == id)
+        {
+            found = true;
+
+            double oldBill = p.bill;
+
+            cout << "Old Bill: " << oldBill << endl;
+
+            cout << "Enter New Bill: ";
+            cin >> newBill;
+
+            p.bill = newBill;
+
+            file.seekp(-static_cast<streamoff>(sizeof(p)),
+                       ios::cur);
+
+            file.write((char*)&p, sizeof(p));
+
+            audit(id, oldBill, newBill);
+
+            cout << "Bill updated successfully.\n";
+            break;
+        }
+    }
+
+    if (!found)
+        cout << "Patient not found.\n";
+
+    file.close();
+}
+void dischargePatient()
+{
+    int id;
+
+    cout << "Enter Patient ID: ";
+    cin >> id;
+
+    fstream file("patients.dat",
+                 ios::binary | ios::in | ios::out);
+
+    Patient p;
+    bool found = false;
+
+    while (file.read((char*)&p, sizeof(p)))
+    {
+        if (p.patientID == id)
+        {
+            found = true;
+
+            cout << "Enter Discharge Date (DD-MM-YYYY): ";
+            cin >> p.dischargeDate;
+
+            p.discharged = true;
+
+            file.seekp(-static_cast<streamoff>(sizeof(p)),
+                       ios::cur);
+
+            file.write((char*)&p, sizeof(p));
+
+            cout << "Patient discharged successfully.\n";
+            break;
+        }
+    }
+
+    if (!found)
+        cout << "Patient not found.\n";
+
+    file.close();
+}
+void dailyReport()
+{
+    char date[11];
+
+    cout << "Enter Admission Date (DD-MM-YYYY): ";
+    cin >> date;
+
+    ifstream file("patients.dat", ios::binary);
+
+    Patient p;
+    bool found = false;
+
+    cout << "\nDaily Admission Report\n";
+
+    while (file.read((char*)&p, sizeof(p)))
+    {
+        if (strcmp(p.admissionDate, date) == 0)
+        {
+            p.display();
+            found = true;
+        }
+    }
+
+    if (!found)
+        cout << "No admissions found.\n";
+
+    file.close();
+}
+void unpaidBills()
+{
+    ifstream file("patients.dat", ios::binary);
+
+    Patient p;
+    bool found = false;
+
+    cout << "\nUnpaid Bills\n";
+
+    cout << "ID\tName\tBill\n";
+
+    while (file.read((char*)&p, sizeof(p)))
+    {
+        if (p.bill == 0)
+        {
+            cout << p.patientID << "\t"
+                 << p.name << "\t"
+                 << p.bill << endl;
+
+            found = true;
+        }
+    }
+
+    if (!found)
+        cout << "No unpaid bills.\n";
+
+    file.close();
+}
+
+
+int main()
+{
+    int choice;
+
+    do
+    {
+        cout << "\n===== HOSPITAL RECORD SYSTEM =====\n";
+        cout << "1. Add Patient\n";
+        cout << "2. Search Patient\n";
+        cout << "3. Doctor-wise Report\n";
+        cout << "4. Update Bill\n";
+        cout << "5. Discharge Patient\n";
+        cout << "6. Daily Admission Report\n";
+        cout << "7. Unpaid Bills Report\n";
+        cout << "8. Exit\n";
+
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        switch (choice)
+        {
+        case 1:
+            addPatient();
+            break;
+
+        case 2:
+            searchPatient();
+            break;
+
+        case 3:
+            doctorReport();
+            break;
+
+        case 4:
+            updateBill();
+            break;
+
+        case 5:
+            dischargePatient();
+            break;
+
+        case 6:
+            dailyReport();
+            break;
+
+        case 7:
+            unpaidBills();
+            break;
+
+        case 8:
+            cout << "Program ended.\n";
+            break;
+
+        default:
+            cout << "Invalid choice.\n";
+        }
+
+    } while (choice != 8);
+
+    return 0;
+}
