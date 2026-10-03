@@ -1,0 +1,82 @@
+/*
+Develop a library Book Management System in C++ using Object-Oriented Programming The system should allow a 
+librarian to store and manage information about books in a library 
+Each book should have details such as book ID, title, author, and availiability status
+Create a class named Book with appropriate data members and member functions
+Requirements
+Your program shouyld:
+	Create a Book class containing:
+	bookId;
+	title;
+	author;
+	isAvailable
+
+Implement:
+	1. Default construction to initialize a book with default values
+	2. Parameterized constructor to initilaize book details when an object is created.
+	3. Destructor that displays a message when a book object is destroyed
+	4. A function displayBook() to display book information
+	5. A function issueBook() to issue a book if it is available
+	6. A function returnBook() to mark an issued book as available
+	
+Main Program
+	1. Create atleast three Book objects using constructor
+	2. Display the details of all books
+	3. Issue one or more books
+	4. Try to issue an already issued book and display an appropriate message
+	5. Return a book
+	6. Display the updated book details
+	7. Observe the destructor message when the objects are destroyed
+*/
+
+--------------------------------------------------------------------------------------------------------------------------------
+
+/*
+Write a C++ program to implement a Student Result Management System using a class student.
+The program should use a parameterized constructor to initialize student details, a destructor to display a message when
+objects are destroyed
+	a static variable to count the number of students, and a static functions to display the count
+Store the details of 5 students using an array of objects
+Calculate total marks and percentage for each student and display the student with the higest percentage  
+*/
+
+---------------------------------------------------------------------------------------------------------------------------------
+
+/*
+Develop a Hospital Patient Management System uing C++ file handling
+
+Create a class Patient with the following data member:
+	Patient ID;
+	Patient Name;
+	Age;
+	Diesase
+	Doctor Name
+	Hospital Charges
+
+The Program should provide the following operations
+	1.Add a new patient record 
+	2.Display all patient records 
+	3.Search for a patient records
+	4.Update patient information
+	5.Delete a patient record
+	6.Store all records permanently in a file
+*/
+
+-----------------------------------------------------------------------------------------------------------------------------------
+
+/*
+Problem Statement
+Develop a mwnudriven Stock Management System using C++ wiht classes and file Handling
+Create a class named Stock containing the following data members;
+	ProductId, Product Name, Category, Price, Qunatity, Supplier Name
+The System should store all product records permanently in a file named stock.txt
+The program should provide the following menu options:
+	1.Add Product - Add a new product to the stock
+	2.Display All Product - Display all products stored in the file
+	3.Search Product - Search for a product using Product Id;
+	4.Update Product - Modify the details of an existing product;
+	5.Delete Product - Delete a product from the stock;
+	6.Purchase Stock - Increase the quantity of a product
+	7.Sell Stock - Decrease the quantity of a product
+	8.Calculate Stock Value: Calculate the total value of all available stock.
+*/
